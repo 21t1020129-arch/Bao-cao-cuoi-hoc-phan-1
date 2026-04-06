@@ -6,7 +6,15 @@ import pickle
 import os
 
 print("1. Đang tải và làm sạch dữ liệu...")
-df = pd.read_csv('online_retail.csv', encoding='latin1')
+# Lấy đường dẫn thư mục hiện tại của file Train.py
+base_path = os.path.dirname(__file__)
+file_path = os.path.join(base_path, 'online_retail.csv')
+
+# Đọc file với đường dẫn đã chuẩn hóa
+try:
+    df = pd.read_csv(file_path, encoding='latin1')
+except FileNotFoundError:
+    st.error(f"Không tìm thấy file tại: {file_path}. Vui lòng kiểm tra lại trên GitHub.")
 df = df.dropna(subset=['CustomerID'])
 df = df[(df['Quantity'] > 0) & (df['UnitPrice'] > 0)]
 df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])
